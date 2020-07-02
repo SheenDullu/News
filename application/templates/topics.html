@@ -1,0 +1,36 @@
+    {% extends "layout.html" %}
+    
+    {% block content %}
+    <h1>Topics</h1>
+
+    <div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <!-- <th scope="col">Topic ID</th> -->
+                <th scope="col"style="text-align: center;">Name</th>
+                <th scope="col" style="text-align: center;">Subscribe/Unsubscribe</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- Construct the rest of courses here -->
+            {% for topic in topicData %}
+            <tr>
+                <!-- <td scope='row'>{{ topic["topic_id"] }}</td> -->
+                <td style="text-align: center;">{{ topic["name"] }}</td>
+                <td>
+                    <form action="{{url_for('following')}}" method="POST">
+                        <input type="hidden" name="topic_id" value="{{topic['topic_id']}}">
+                        <input type="hidden" name="name" value="{{topic['name']}}">
+                    <button>Subscribe</button>
+                </form>
+                </td>
+            </tr>
+            {% endfor %}
+            
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
