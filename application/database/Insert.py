@@ -1,6 +1,9 @@
 # from application import db
 from datetime import datetime
+
 import pymongo
+from bson import ObjectId
+from pymongo.errors import PyMongoError
 
 
 def one_insert_in_articles(data):
@@ -8,27 +11,28 @@ def one_insert_in_articles(data):
     db = client["News"]
     col = db["articles"]
     insert = col.insert_one(data)
-    # print("Insert Status: ", insert.acknowledged)
+    print("Insert Status: ", insert.acknowledged)
 
 
-def update_one_in_articles(url, dict_article):
+def update_one_in_articles(article):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["News"]
     col = db["articles"]
-    newvalues = {"$set": dict_article}
-    update = col.update_one({'url': url}, newvalues)
-    # print("Updated article ", url)
+    col.delete_one({'url': article['url']})
+    insert = col.insert_one(article)
+    print("updated: ", article['url'])
 
 
 def bulk_insert_in_articles(articles):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["News"]
     col = db["articles"]
-    before = col.count_documents({})
-    insert = col.insert_many(articles)
-    after = col.count_documents({})
-    print("Number of Inserts: ", (after-before))
-    # return insert.inserted_ids
+    try:
+        col.insert_many(articles, ordered=False)
+    except pymongo.errors.OperationFailure as e:
+        print(e.code)
+        print(e.details)
+    print("Inserted")
 
 
 def in_seed_urls(channel, url, channel_url, topic, frequency):
@@ -65,39 +69,53 @@ def update_in_db_crawl_list(update_crawls_list):
     db = client["News"]
     col = db["urls_to_crawl"]
     for old_url, new_url in update_crawls_list.items():
+        if col.find_one({'url': new_url}) is not None:
+            continue
         select = {"url": old_url}
         new_values = {"$set": {"url": new_url}}
         col.update_one(select, new_values)
         print("Updated", old_url, "to", new_url)
 
 
-def update_urls_to_crawl(update_urls_list):
+def update_text_in_url(url, text):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["News"]
     col = db["urls_to_crawl"]
-    for url in update_urls_list:
-        select = {"url": url}
-        new_values = {"$set": {"visited": True}}
-        col.update_one(select, new_values)
-    print("Updated value to True")
+    select = {"url": url}
+    new_values = {"$set": {"content": text}}
+    col.update_one(select, new_values)
 
 
-def in_urls_to_crawl_seed(list_data):
+def delete_urls_to_crawl(delete_urls):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["News"]
     col = db["urls_to_crawl"]
-    col.insert_many(list_data)
-    count = col.count_documents({})
-    print("New Count of Urls: ", count)
+    for url in delete_urls:
+        select = {'url': url}
+        delete = col.delete_one(select)
+        print("Deleted ", delete.acknowledged, url)
 
 
-def in_urls_to_crawl(urls):
+def feeds_urls_to_crawl(list_feeds):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["News"]
     col = db["urls_to_crawl"]
-    col.insert_many(urls)
-    count = col.count_documents({})
-    print("New Count: ", count)
+    try:
+        col.insert_many(list_feeds, ordered=False)
+    except pymongo.errors.OperationFailure as e:
+        print(e.details)
+    print("Inserted ")
+
+
+def delete_url(id):
+    client = pymongo.MongoClient("mongodb://localhost:27017")
+    db = client["News"]
+    col = db["article"]
+    data = {
+        '_id': id
+    }
+    delete = col.delete_one(ObjectId(id))
+    print(delete.acknowledged)
 
 
 if __name__ == '__main__':

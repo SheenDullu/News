@@ -2,31 +2,56 @@
 
 {% block content %}
 
-<button>All</button><button>All</button><button>All</button>
     <div class="row">
         <div class="col-md-12 text-center">
 
             {% if not news %}
                 <h1>You are not subscribed to any topic.</h1>
             {% else %}
-                <div class="content">
-
-
-
-                    {% for feed in news %}
-
-                    <div class="card">
-                      <h1>{{ feed.u2["title"] }}</h1>
-                      <!-- <p class="title">{{ feed.u2["topic_via_channel"] }}</p> -->
-                      <p class="title">{{ feed.u2["authors"] }}</p>
-                      <p class="title">{{ feed.u2["published_date"] }}</p>
-                      <p>{{ feed.u2["summary"] }}</p>
-                      <p> <a href= "{{ feed.u2['url'] }}" target="_blank"><button>Read Story</button></a></p>
+                <div class="tab">
+                        {% for topic in topics %}
+                            <button class="tablinks" onclick="openCity(event, '{{topic['topic_id']}}')">{{ topic['name'] }}</button>
+                        {% endfor %}
                     </div>
-
+                
+                    {% for feed in news %}
+                        <div id= {{feed}} class="tabcontent">
+                            <div class="content">
+                            {% for article in news[feed] %}
+                            <div class="card">
+                              <h1>{{article['u2']['title']}}</h1>
+                              <p class="title">{{article['u2']['newspaper_authors']}}</p>
+                              <p class="title">{{article['u2']['channel_id']}}</p>
+                              <p>{{article['u2']['newspaper_summary']}}</p>
+                              <p><a href= "{{article['u2']['url']}}" target="_blank"><button style="width:100%">Read More</button></a></p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        </div>
                     {% endfor %}
-                </div>
+                
+                <script type="text/javascript">
+                    function openCity(evt, cityName) {
+                      // Declare all variables
+                      var i, tabcontent, tablinks;
 
+                      // Get all elements with class="tabcontent" and hide them
+                      tabcontent = document.getElementsByClassName("tabcontent");
+                      for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                      }
+
+                      // Get all elements with class="tablinks" and remove the class "active"
+                      tablinks = document.getElementsByClassName("tablinks");
+                      for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                      }
+
+                      // Show the current tab, and add an "active" class to the button that opened the tab
+                      document.getElementById(cityName).style.display = "block";
+                      evt.currentTarget.className += " active";
+                }
+                </script>
             {% endif %}
         </div>
     </div>

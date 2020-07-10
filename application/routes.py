@@ -125,9 +125,11 @@ def following():
             Following(user_id=user_id, topic_id=topic_id).save()
             flash(f"You are enrolled in {name}!", "success")
 
-    news = topic_user(user_id)
+    news = user_feed(user_id)
+    topics = user_topics(user_id)
+    # flash(f"Oops! You are already registered in this Topic {news[1]}!", "danger")
 
-    return render_template("following.html", following=True, title="News For You", news=news)    
+    return render_template("following.html", following=True, title="News For You", news=news, topics=topics)    
 
 
 
