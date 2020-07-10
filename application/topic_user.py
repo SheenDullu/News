@@ -1,4 +1,4 @@
-from application.models import User, Following, Topics
+from application.models import User, Following, Topics, Channel
 
 
 def user_feed(user_id):
@@ -66,3 +66,10 @@ def user_topics(user_id):
         user_topics.append(topic['topic_id'])
     topics = list(Topics.objects(topic_id__in=user_topics).fields(topic_id=1, name=1))
     return topics
+
+def get_channel():
+    all_channels = list(Channel.objects.all()..fields(channel_id=1, name=1,id=0))
+    channels = dict()
+    for channel in all_channels:
+        channels[channel['channel_id']] = channel['name']
+    return channels

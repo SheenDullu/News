@@ -62,3 +62,9 @@ class Articles(db.Document):
 class Following(db.Document):
     user_id = db.IntField()
     topic_id = db.IntField()
+
+class Channel(db.Document):
+    channel_id=db.IntField()
+    name = db.StringField(max_length=50, unique=True, required=True)
+    source_url = db.StringField(max_length=100, unique=True, required=True)
+    created_at = db.DateTimeField(default=datetime.now)

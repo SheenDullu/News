@@ -127,9 +127,10 @@ def following():
 
     news = user_feed(user_id)
     topics = user_topics(user_id)
+    channels = get_channel()
     # flash(f"Oops! You are already registered in this Topic {news[1]}!", "danger")
 
-    return render_template("following.html", following=True, title="News For You", news=news, topics=topics)    
+    return render_template("following.html", following=True, title="News For You", news=news, topics=topics, channels=channels)    
 
 
 

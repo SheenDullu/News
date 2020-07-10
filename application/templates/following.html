@@ -21,7 +21,7 @@
                             <div class="card">
                               <h1>{{article['u2']['title']}}</h1>
                               <p class="title">{{article['u2']['newspaper_authors']}}</p>
-                              <p class="title">{{article['u2']['channel_id']}}</p>
+                              <p class="title">{{ channel[article['u2']['channel_id']]}}</p>
                               <p>{{article['u2']['newspaper_summary']}}</p>
                               <p><a href= "{{article['u2']['url']}}" target="_blank"><button style="width:100%">Read More</button></a></p>
                             </div>
@@ -31,6 +31,7 @@
                     {% endfor %}
                 
                 <script type="text/javascript">
+                    
                     function openCity(evt, cityName) {
                       // Declare all variables
                       var i, tabcontent, tablinks;
