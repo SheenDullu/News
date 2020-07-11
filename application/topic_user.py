@@ -34,10 +34,11 @@ def user_feed(user_id):
             }
         }, {
             '$sort': {
-                'published_date': 1
+                'u2.published_date':-1
             }
         }
     ]))
+
 
     dict_of_tags = {}
     list_news = []
@@ -68,7 +69,7 @@ def user_topics(user_id):
     return topics
 
 def get_channel():
-    all_channels = list(Channel.objects.all()..fields(channel_id=1, name=1,id=0))
+    all_channels = list(Channel.objects.all())
     channels = dict()
     for channel in all_channels:
         channels[channel['channel_id']] = channel['name']

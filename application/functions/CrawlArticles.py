@@ -78,7 +78,7 @@ def update_article(data, news_feed, article):
         article['newspaper_keywords'] = list(news_feed.keywords)
         article['newspaper_tags'] = list(news_feed.tags)
         article['newspaper_last_modified'] = news_mod_date
-        article['last_crawled'] = datetime.now()
+        article['last_crawled'] = datetime.datetime.now().replace(tzinfo=utc)
         update_one_in_articles(article)
 
 
