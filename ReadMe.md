@@ -1,4 +1,7 @@
-Create virtual environment folder for the project: python -m venv venv <!-- <the folder name> -->
-run the virtual environment: venv\Scripts\activate
-To copy all the packages needed from the project : pip freeze > requirements.txt
-To install all the packages from the requirements.txt: pip install -r requirements.txt
+Step 1: Create virtual environment folder: python -m venv venv
+
+Step 2: Activate the virtual environment: venv\Scripts\activate
+
+Step 3: Install all the packages required: pip install -r requirements.txt
+
+Step 4: Create a database "News" in Mongo DB
